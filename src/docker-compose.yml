@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  ethortest:
+    image: ${DOCKER_REGISTRY-}ethortest
+    build:
+      context: .
+      dockerfile: eThorTest\Dockerfile

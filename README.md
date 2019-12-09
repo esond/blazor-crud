@@ -27,3 +27,4 @@ Create an ASP.NET Core web site that can perform the following:
 - The requirement to use Castle Windsor is not achievable if developing the app
   with Blazor. Blazor requires .NET Core 3.0 or higher, and Castle windsor [does
   not yet support .NET Core 3.0.](https://github.com/castleproject/Windsor/issues/418)
+  - See also: [.NET docs - Default service container replacement](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1#default-service-container-replacement)

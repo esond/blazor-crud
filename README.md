@@ -21,6 +21,7 @@ Create an ASP.NET Core web site that can perform the following:
 - .NET Core 3.1
 - Visual Studio 16.4.0 or higher
 - An active Google account
+- Docker Desktop using Windows containers
 
 ## Notes
 

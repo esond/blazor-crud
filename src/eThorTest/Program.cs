@@ -18,9 +18,9 @@ namespace eThorTest
                     var config = builder.Build();
 
                     builder.AddAzureKeyVault(
-                        config["KeyVaultUrl"],
-                        config["ApplicationClientId"],
-                        config["ApplicationClientSecret"]);
+                        config[ConfigurationConstants.KeyVaultUrl],
+                        config[ConfigurationConstants.ApplicationClientId],
+                        config[ConfigurationConstants.ApplicationClientSecret]);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

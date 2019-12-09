@@ -35,8 +35,8 @@ namespace eThorTest
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
-                    options.ClientId = Configuration["Authentication-Google-ClientId"];
-                    options.ClientSecret = Configuration["Authentication-Google-ClientSecret"];
+                    options.ClientId = Configuration[ConfigurationConstants.GoogleClientId];
+                    options.ClientSecret = Configuration[ConfigurationConstants.GoogleClientSecret];
                 });
 
             services.AddScoped<IEntityRepository, EfEntityRepository>();

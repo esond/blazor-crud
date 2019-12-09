@@ -1,15 +1,15 @@
 ﻿@inherits ComponentBase
-@using eThorTest.Data
+@using eThorTest.Models
 
 @if (_isEditing)
 {
 <tr>
-    <td>@Entity.Id</td>
+    <td>@Model.Id</td>
     <td>
-        <input id="name" class="form-control" type="text" autocomplete="off" @bind-value="@Entity.Name" />
+        <input id="name" class="form-control" type="text" autocomplete="off" @bind-value="@Model.Name" />
     </td>
     <td>
-        <textarea id="properties" class="form-control" rows="3" autocomplete="off" @bind="@EntityProperties"
+        <textarea id="properties" class="form-control" rows="3" autocomplete="off" @bind="@Model.PropertiesValue">
                   aria-describedby="propertiesHelp">
         </textarea>
         <small id="propertiesHelp" class="form-text text-muted">
@@ -17,7 +17,7 @@
         </small>
     </td>
     <td>
-        <EditForm Model="@Entity" OnValidSubmit="@UpdateAsync">
+        <EditForm Model="@Model" OnValidSubmit="@UpdateAsync">
             <DataAnnotationsValidator />
             <div class="form-group">
                 <button class="btn btn-primary" type="submit">
@@ -32,11 +32,11 @@
 else
 {
     <tr>
-        <td>@Entity.Id</td>
-        <td>@Entity.Name</td>
+        <td>@Model.Id</td>
+        <td>@Model.Name</td>
         <td>
             <ul>
-                @foreach (var property in Entity.HardProperty)
+                @foreach (var property in Model.Properties)
                 {
                     <li>@property</li>
                 }
@@ -56,10 +56,10 @@ else
 @code {
 
     [Parameter]
-    public EThorTestEntity Entity { get; set; }
+    public EntityModel Model { get; set; }
 
     [Parameter]
-    public EventCallback<EThorTestEntity> UpdateCallback { get; set; }
+    public EventCallback<EntityModel> UpdateCallback { get; set; }
 
     [Parameter]
     public EventCallback<Guid> DeleteCallback { get; set; }
@@ -68,19 +68,13 @@ else
 
     private async Task UpdateAsync()
     {
-        await UpdateCallback.InvokeAsync(Entity);
+        await UpdateCallback.InvokeAsync(Model);
 
         _isEditing = false;
     }
 
     private Task DeleteAsync()
     {
-        return DeleteCallback.InvokeAsync(Entity.Id);
-    }
-
-    private string EntityProperties
-    {
-        get => string.Join('\n', Entity.HardProperty);
-        set => Entity.HardProperty = value.Split(new [] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        return DeleteCallback.InvokeAsync(Model.Id);
     }
 }

@@ -1,6 +1,6 @@
-﻿@using eThorTest.Data
+﻿@using eThorTest.Models
 @using eThorTest.Services
-@using eThorTest.Components
+@using eThorTest.Shared
 @inject IEntityRepository Repository
 @page "/"
 
@@ -17,7 +17,7 @@
 
         <div class="form-group">
             <label for="properties">Properties</label>
-            <textarea id="properties" class="form-control" rows="3" autocomplete="off" aria-describedby="propertiesHelp" @bind="@PropertiesValue"></textarea>
+            <textarea id="properties" class="form-control" rows="3" autocomplete="off" aria-describedby="propertiesHelp" @bind="@_newEntity.PropertiesValue"></textarea>
             <small id="propertiesHelp" class="form-text text-muted">
                 Properties are new-line delimited.
             </small>
@@ -37,16 +37,16 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Properties</th>
-                <th scope="col">Actions</th>
+                <th scope="col" class="col-3">Id</th>
+                <th scope="col" class="col-3">Name</th>
+                <th scope="col" class="col-4">Properties</th>
+                <th scope="col" class="col-2">Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var entity in _entities)
+            @foreach (var model in _models)
             {
-                <EntityRowComponent Entity="@entity"
+                <EntityRowComponent Model="@model"
                                     UpdateCallback="e => UpdateAsync(e)"
                                     DeleteCallback="id => DeleteAsync(id)" />
             }
@@ -55,15 +55,9 @@
 </div>
 
 @code {
-    private EThorTestEntity _newEntity = new EThorTestEntity(); //TODO: Do I even need this here?
+    private EntityModel _newEntity = new EntityModel();
 
-    private IEnumerable<EThorTestEntity> _entities = new List<EThorTestEntity>();
-
-    private string PropertiesValue
-    {
-        get => string.Join("/r", _newEntity.HardProperty);
-        set => _newEntity.HardProperty = value.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-    }
+    private IEnumerable<EntityModel> _models = new List<EntityModel>();
 
     protected override Task OnInitializedAsync()
     {
@@ -72,21 +66,21 @@
 
     private async Task RefreshAsync()
     {
-        _newEntity = new EThorTestEntity();
+        _newEntity = new EntityModel();
 
-        _entities = await Repository.GetAllAsync();
+        _models = (await Repository.GetAllAsync()).Select(e => new EntityModel(e));
     }
 
     private async Task CreateAsync()
     {
-        await Repository.CreateAsync(_newEntity);
+        await Repository.CreateAsync(_newEntity.GetEntity());
 
         await RefreshAsync();
     }
 
-    private async Task UpdateAsync(EThorTestEntity entity)
+    private async Task UpdateAsync(EntityModel model)
     {
-        await Repository.UpdateAsync(entity);
+        await Repository.UpdateAsync(model.GetEntity());
 
         await RefreshAsync();
     }

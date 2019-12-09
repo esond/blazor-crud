@@ -25,6 +25,9 @@ Create an ASP.NET Core web site that can perform the following:
 
 ## Notes
 
+- To run the app, the value of the `ApplicationClientSecret` configuration
+  setting (`src/eThorTest/appsettings.json`) must be replaced with the value
+  found in the `credentials.json` file sent alongside this project.
 - The requirement to use Castle Windsor is not achievable if developing the app
   with Blazor. Blazor requires .NET Core 3.0 or higher, and Castle windsor [does
   not yet support .NET Core 3.0.](https://github.com/castleproject/Windsor/issues/418)

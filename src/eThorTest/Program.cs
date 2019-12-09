@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 namespace eThorTest
@@ -12,6 +13,15 @@ namespace eThorTest
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((ctx, builder) =>
+                {
+                    var config = builder.Build();
+
+                    builder.AddAzureKeyVault(
+                        config["KeyVaultUrl"],
+                        config["ApplicationClientId"],
+                        config["ApplicationClientSecret"]);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

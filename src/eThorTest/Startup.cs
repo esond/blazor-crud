@@ -15,8 +15,7 @@ namespace eThorTest
     public class Startup
     {
         public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
+        {            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -36,10 +35,8 @@ namespace eThorTest
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {
-                    var googleAuthNSection = Configuration.GetSection("Authentication:Google");
-
-                    options.ClientId = googleAuthNSection["ClientId"];
-                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                    options.ClientId = Configuration["Authentication-Google-ClientId"];
+                    options.ClientSecret = Configuration["Authentication-Google-ClientSecret"];
                 });
 
             services.AddScoped<IEntityRepository, EfEntityRepository>();

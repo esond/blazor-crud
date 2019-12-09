@@ -8,7 +8,12 @@
         <input id="name" class="form-control" type="text" autocomplete="off" @bind-value="@Entity.Name" />
     </td>
     <td>
-        <span>[Properties]</span>
+        <textarea id="properties" class="form-control" rows="3" autocomplete="off" @bind="@EntityProperties"
+                  aria-describedby="propertiesHelp">
+        </textarea>
+        <small id="propertiesHelp" class="form-text text-muted">
+            Properties are new-line delimited.
+        </small>
     </td>
     <td>
         <EditForm Model="@Entity" OnValidSubmit="@UpdateAsync">
@@ -28,7 +33,14 @@ else
     <tr>
         <td>@Entity.Id</td>
         <td>@Entity.Name</td>
-        <td>@string.Join(", ", Entity.HardProperty)</td>
+        <td>
+            <ul>
+                @foreach (var property in Entity.HardProperty)
+                {
+                    <li>@property</li>
+                }
+            </ul>
+        </td>
         <td>
             <button class="btn btn-secondary" type="button" @onclick="() => _isEditing = true">
                 <span class="oi oi-pencil" aria-hidden="true"></span>
@@ -63,5 +75,11 @@ else
     private Task DeleteAsync()
     {
         return DeleteCallback.InvokeAsync(Entity.Id);
+    }
+
+    private string EntityProperties
+    {
+        get => string.Join('\n', Entity.HardProperty);
+        set => Entity.HardProperty = value.Split(new [] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
     }
 }

@@ -15,6 +15,14 @@
             <input id="name" class="form-control" type="text" autocomplete="off" @bind-value="@_newEntity.Name" />
         </div>
 
+        <div class="form-group">
+            <label for="properties">Properties</label>
+            <textarea id="properties" class="form-control" rows="3" autocomplete="off" aria-describedby="propertiesHelp" @bind="@PropertiesValue"></textarea>
+            <small id="propertiesHelp" class="form-text text-muted">
+                Properties are new-line delimited.
+            </small>
+        </div>
+
         <ValidationSummary />
 
         <div class="form-group">
@@ -47,11 +55,15 @@
 </div>
 
 @code {
-    // TODO:  Validation
-
-    private EThorTestEntity _newEntity = new EThorTestEntity();
+    private EThorTestEntity _newEntity = new EThorTestEntity(); //TODO: Do I even need this here?
 
     private IEnumerable<EThorTestEntity> _entities = new List<EThorTestEntity>();
+
+    private string PropertiesValue
+    {
+        get => string.Join("/r", _newEntity.HardProperty);
+        set => _newEntity.HardProperty = value.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+    }
 
     protected override Task OnInitializedAsync()
     {

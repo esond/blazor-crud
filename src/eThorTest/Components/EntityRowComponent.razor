@@ -1,0 +1,67 @@
+﻿@using eThorTest.Data
+
+@if (_isEditing)
+{
+<tr>
+    <td>@Entity.Id</td>
+    <td>
+        <input id="name" class="form-control" type="text" autocomplete="off" @bind-value="@Entity.Name" />
+    </td>
+    <td>
+        <span>[Properties]</span>
+    </td>
+    <td>
+        <EditForm Model="@Entity" OnValidSubmit="@UpdateAsync">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">
+                    <span class="oi oi-check" aria-hidden="true"></span>
+                </button>
+            </div>
+            <ValidationSummary />
+        </EditForm>
+    </td>
+</tr>
+}
+else
+{
+    <tr>
+        <td>@Entity.Id</td>
+        <td>@Entity.Name</td>
+        <td>@string.Join(", ", Entity.HardProperty)</td>
+        <td>
+            <button class="btn btn-secondary" type="button" @onclick="() => _isEditing = true">
+                <span class="oi oi-pencil" aria-hidden="true"></span>
+            </button>
+            <button class="btn btn-danger" type="button" @onclick="@DeleteAsync">
+                <span class="oi oi-trash" aria-hidden="true"></span>
+            </button>
+        </td>
+    </tr>
+}
+
+@code {
+
+    [Parameter]
+    public EThorTestEntity Entity { get; set; }
+
+    [Parameter]
+    public EventCallback<EThorTestEntity> UpdateCallback { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> DeleteCallback { get; set; }
+
+    private bool _isEditing;
+
+    private async Task UpdateAsync()
+    {
+        await UpdateCallback.InvokeAsync(Entity);
+
+        _isEditing = false;
+    }
+
+    private Task DeleteAsync()
+    {
+        return DeleteCallback.InvokeAsync(Entity.Id);
+    }
+}

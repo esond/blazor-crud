@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using eThorTest.Areas.Identity;
 using eThorTest.Data;
+using eThorTest.Services;
 
 namespace eThorTest
 {
@@ -49,6 +50,8 @@ namespace eThorTest
                     options.ClientId = googleAuthNSection["ClientId"];
                     options.ClientSecret = googleAuthNSection["ClientSecret"];
                 });
+
+            services.AddScoped<IEntityRepository, EfEntityRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

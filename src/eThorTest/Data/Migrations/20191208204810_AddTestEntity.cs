@@ -12,7 +12,7 @@ namespace eThorTest.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     HardProperty = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

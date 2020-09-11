@@ -1,4 +1,4 @@
-# ethor-test
+# blazor-crud
 
 ## Specification
 
